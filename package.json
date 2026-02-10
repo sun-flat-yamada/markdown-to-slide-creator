@@ -11,7 +11,11 @@
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsx src/index.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "marp",
@@ -27,13 +31,17 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@marp-team/marp-cli": "^4.2.3",
     "@types/ejs": "^3.1.5",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.2.2",
+    "eslint": "^9.20.0",
+    "prettier": "^3.5.1",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.24.0",
     "vitest": "^4.0.18"
   }
 }

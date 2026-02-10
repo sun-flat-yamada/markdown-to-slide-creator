@@ -21,7 +21,7 @@ export function preprocessMarkdown(
     autoSection?: boolean;
     autoCover?: boolean;
     autoEnd?: boolean;
-  } = {}
+  } = {},
 ): PreprocessResult {
   const autoSection = options.autoSection ?? config.auto_structure.enabled;
   const autoCover = options.autoCover ?? config.auto_structure.auto_cover;
@@ -30,11 +30,9 @@ export function preprocessMarkdown(
 
   // 既存の front-matter を除去
   let body = markdown;
-  let existingFrontMatter = '';
   if (body.trimStart().startsWith('---')) {
     const match = body.match(/^---\n([\s\S]*?)\n---\n?/);
     if (match) {
-      existingFrontMatter = match[1] ?? '';
       body = body.slice(match[0].length);
     }
   }
@@ -48,9 +46,10 @@ export function preprocessMarkdown(
   const footerHtml = buildFooterDirective(config);
 
   // スライドサイズ
-  const sizeDirective = typeof config.slide.size === 'string'
-    ? config.slide.size
-    : `${config.slide.size.width} ${config.slide.size.height}`;
+  const sizeDirective =
+    typeof config.slide.size === 'string'
+      ? config.slide.size
+      : `${config.slide.size.width} ${config.slide.size.height}`;
 
   // front-matter 構築
   const frontMatter = [
@@ -97,7 +96,6 @@ export function preprocessMarkdown(
 
   if (autoSection && sections.length > 0) {
     const bodyLines = body.split('\n');
-    const prefix = '#'.repeat(headingLevel) + ' ';
 
     for (let si = 0; si < sections.length; si++) {
       const section = sections[si]!;
@@ -158,9 +156,7 @@ export function preprocessMarkdown(
   } else {
     // 表紙はあるがセクション自動検出なし
     const bodyLines = body.split('\n');
-    const startLine = cover
-      ? (cover.subtitleLine ?? cover.titleLine) + 1
-      : 0;
+    const startLine = cover ? (cover.subtitleLine ?? cover.titleLine) + 1 : 0;
     const remaining = bodyLines.slice(startLine).join('\n').trim();
     if (remaining) {
       outputSlides.push(remaining);

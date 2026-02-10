@@ -1,0 +1,127 @@
+# =============================================================================
+# Repository-shared Git configuration
+# =============================================================================
+#
+# このファイルを有効化するには、以下のコマンドを一度だけ実行してください:
+#
+#   git config --local include.path ../.gitconfig
+#
+# =============================================================================
+
+# --- Aliases -----------------------------------------------------------------
+
+[alias]
+  # ===== Graph / Log visualization =====
+
+  # カラフルなグラフ表示 (全ブランチ)
+  graph = log --graph --all --oneline --decorate --color \
+    --pretty=format:'%C(bold red)%h%C(reset) %C(bold green)(%cr)%C(reset) %C(white)%s%C(reset) %C(bold cyan)— %an%C(reset)%C(auto)%d%C(reset)'
+
+  # コンパクトなグラフ (直近 20 件)
+  gr = log --graph --all --oneline --decorate -20
+
+  # 詳細グラフ (コミットメッセージ + 変更サマリ)
+  grl = log --graph --all --decorate --stat \
+    --pretty=format:'%C(bold yellow)%h%C(reset) %C(bold green)(%ci)%C(reset)%C(auto)%d%C(reset)%n  %C(white)%s%C(reset) %C(dim)— %an%C(reset)%n'
+
+  # ブランチ関係図 (マージ構造のみ)
+  gm = log --graph --all --oneline --decorate --merges
+
+  # ===== Status / Diff shortcuts =====
+
+  st = status --short --branch
+  d  = diff
+  ds = diff --staged
+  dw = diff --word-diff
+
+  # ===== Branch shortcuts =====
+
+  br  = branch -vv
+  bra = branch -avv
+  sw  = switch
+  swc = switch -c
+
+  # ===== Commit shortcuts =====
+
+  ci  = commit
+  cia = commit --amend
+  can = commit --amend --no-edit
+  wip = "!git add -A && git commit -m 'wip: work in progress [skip ci]'"
+
+  # ===== Stash shortcuts =====
+
+  sl = stash list
+  sp = stash pop
+  ss = stash push -m
+
+  # ===== Undo / Safety =====
+
+  # 直前のコミットを取り消し (変更は staged に戻す)
+  undo = reset --soft HEAD~1
+
+  # 全変更を破棄 (要注意)
+  nuke = !git reset --hard HEAD && git clean -fd
+
+  # ===== Utility =====
+
+  # コミットの変更ファイル一覧
+  files = diff-tree --no-commit-id --name-status -r
+
+  # 誰が何行書いたか
+  who = shortlog -sn --no-merges
+
+  # タグ一覧 (バージョン順)
+  tags = tag -l --sort=-v:refname
+
+  # リモートのプルーン
+  prune-remote = fetch --prune
+
+# --- Core --------------------------------------------------------------------
+
+[core]
+  autocrlf = false
+  eol = lf
+  ignorecase = false
+  quotepath = false
+  pager = less -FRX
+
+# --- Push / Pull --------------------------------------------------------------
+
+[push]
+  default = current
+  autoSetupRemote = true
+  followTags = true
+
+[pull]
+  rebase = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+
+# --- Merge / Rebase -----------------------------------------------------------
+
+[merge]
+  ff = false
+  conflictstyle = zdiff3
+
+[rebase]
+  autoStash = true
+  autoSquash = true
+
+# --- Diff ---------------------------------------------------------------------
+
+[diff]
+  algorithm = histogram
+  colorMoved = default
+  renames = copies
+
+# --- Init ---------------------------------------------------------------------
+
+[init]
+  defaultBranch = main
+
+# --- Rerere (reuse recorded resolution) ---------------------------------------
+
+[rerere]
+  enabled = true

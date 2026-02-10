@@ -25,14 +25,11 @@ export function detectSections(markdown: string, headingLevel: number = 2): Sect
   let sectionIndex = 0;
 
   // front-matter をスキップ
-  let inFrontMatter = false;
   let frontMatterEnd = 0;
   if (lines[0]?.trim() === '---') {
-    inFrontMatter = true;
     for (let i = 1; i < lines.length; i++) {
       if (lines[i]?.trim() === '---') {
         frontMatterEnd = i;
-        inFrontMatter = false;
         break;
       }
     }

@@ -1,5 +1,32 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+
+# Generated CSS
 *.css
-.slide-creator-temp.md
 corporate-theme.css
+
+# Temp files
+.slide-creator-temp.md
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+
+# Coverage
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
