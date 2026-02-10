@@ -1,0 +1,61 @@
+/* ===== Header ===== */
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: <%= header.background %>;
+  color: <%= header.color %>;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* Header 3-column layout */
+header .hl { flex: 1; text-align: left; }
+header .hc { flex: 0 0 auto; text-align: center; }
+header .hr { flex: 1; text-align: right; }
+
+/* ===== Footer ===== */
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--footer-height);
+  background: <%= footer.background %>;
+  color: <%= footer.color %>;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 12px;
+  z-index: 10;
+}
+
+/* Footer 3-column layout */
+footer .fl { flex: 1; text-align: left; }
+footer .fc { flex: 0 0 auto; text-align: center; }
+footer .fr { flex: 1; text-align: right; }
+
+/* Logo in header/footer */
+header img, footer img {
+  height: calc(var(--header-height) - 16px);
+  width: auto;
+  vertical-align: middle;
+}
+footer img {
+  height: calc(var(--footer-height) - 12px);
+}
+
+/* ===== Page Number (Marp paginate) ===== */
+section::after {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  font-size: 12px;
+  color: <%= footer.color %>;
+  z-index: 11;
+}

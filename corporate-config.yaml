@@ -1,0 +1,101 @@
+# ===== slide-creator 設定ファイル =====
+
+# 基本設定
+slide:
+  size: "16:9"
+
+# カラーパレット
+colors:
+  active: "fujifilm"
+  palettes:
+    fujifilm:
+      primary: "#00A78E"
+      secondary: "#005A57"
+      accent: "#E87722"
+      negative: "#C00000"
+      background: "#FFFFFF"
+      text: "#333333"
+      muted: "#999999"
+      gradients:
+        - { name: "header", direction: "to right", stops: ["#00A78E", "#005A57"] }
+        - { name: "cover-line", direction: "to right", stops: ["#00A78E", "#00C9A7"] }
+        - { name: "section-bg", direction: "135deg", stops: ["#F8F9FA", "#FFFFFF"] }
+        - { name: "accent", direction: "to right", stops: ["#E87722", "#FF9A4D"] }
+        - { name: "subtle", direction: "to bottom", stops: ["#F5F5F5", "#EEEEEE"] }
+
+# ロゴ
+logo:
+  path: "./assets/logo.png"
+  width: "150px"
+  position: "footer-right"
+
+# ヘッダー
+header:
+  height: "40px"
+  left: ""
+  center: ""
+  right: ""
+  background: "transparent"
+  color: "#333333"
+
+# フッター
+footer:
+  height: "36px"
+  left: ""
+  center: ""
+  right: "{{company_name}}"
+  background: "transparent"
+  color: "#666666"
+  company_name: "FUJIFILM Holdings Corporation"
+
+# ページ番号
+pagination:
+  enabled: true
+  format: "{{page}}"
+  position: "footer-right"
+  hide_on: ["cover", "end"]
+  start_from: 2
+
+# 余白
+margin:
+  top: "60px"
+  bottom: "50px"
+  left: "50px"
+  right: "50px"
+
+# 特殊スライド
+special_slides:
+  cover:
+    background: "#FFFFFF"
+    title_color: "#333333"
+    title_align: "left"
+    show_accent_line: true
+    accent_line_color: "{{gradient:cover-line}}"
+    show_logo: true
+    logo_position: "bottom-right"
+
+  section_divider:
+    background: "#FFFFFF"
+    title_color: "{{primary}}"
+    show_section_number: true
+    number_color: "#E0E0E0"
+    show_nav_tabs: true
+    separator_line: true
+
+  end:
+    background: "#FFFFFF"
+    show_logo: true
+    logo_position: "center"
+    show_tagline: true
+    tagline: "Value from Innovation"
+
+# 自動構造化
+auto_structure:
+  enabled: true
+  section_heading_level: 2
+  auto_cover: true
+  auto_end: true
+
+# AI プロンプト
+ai_prompt:
+  path: "./prompts/slide-convert.md"

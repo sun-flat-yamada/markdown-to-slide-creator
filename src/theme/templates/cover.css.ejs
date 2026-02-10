@@ -1,0 +1,78 @@
+/* ===== Cover Slide ===== */
+section.cover {
+  background: <%= cover.background %>;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px var(--margin-right) 120px var(--margin-left);
+}
+
+section.cover::before {
+  /* Accent line under title */
+<% if (cover.show_accent_line) { %>
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 45%;
+  left: var(--margin-left);
+  width: 80%;
+  height: 4px;
+  background: <% if (cover.accent_line_color && cover.accent_line_color.startsWith('linear-gradient')) { %><%= cover.accent_line_color %><% } else { %>var(--color-primary)<% } %>;
+<% } else { %>
+  display: none;
+<% } %>
+}
+
+section.cover h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: <%= cover.title_color || 'var(--color-text)' %>;
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+section.cover h2 {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: <%= cover.title_color || 'var(--color-text)' %>;
+  margin-top: 0.2em;
+  margin-bottom: 1em;
+}
+
+section.cover h3 {
+  font-size: 0.9em;
+  font-weight: 400;
+  color: var(--color-muted);
+  margin-top: 2em;
+}
+
+section.cover p {
+  font-size: 0.85em;
+  color: var(--color-muted);
+}
+
+/* Hide header separator on cover */
+section.cover header {
+  background: transparent;
+}
+
+/* Hide page number on cover */
+section.cover::after {
+  display: none;
+}
+
+<% if (cover.show_logo) { %>
+/* Logo on cover */
+section.cover .cover-logo {
+  position: absolute;
+<% if (cover.logo_position === 'bottom-right') { %>
+  bottom: 40px;
+  right: 40px;
+<% } else if (cover.logo_position === 'center') { %>
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+<% } %>
+}
+<% } %>

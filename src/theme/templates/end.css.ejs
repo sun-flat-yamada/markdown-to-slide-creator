@@ -1,0 +1,42 @@
+/* ===== End Slide ===== */
+section.end {
+  background: <%= end.background %>;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+}
+
+/* Hide separator line on end slide */
+section.end::before {
+  display: none;
+}
+
+/* Hide page number on end slide */
+section.end::after {
+  display: none;
+}
+
+/* Hide header/footer on end slide */
+section.end header,
+section.end footer {
+  display: none;
+}
+
+<% if (end.show_logo) { %>
+section.end img {
+  max-width: 300px;
+  height: auto;
+}
+<% } %>
+
+<% if (end.show_tagline) { %>
+section.end p {
+  font-size: 1.1em;
+  color: var(--color-text);
+  margin-top: 10px;
+  font-weight: 500;
+}
+<% } %>

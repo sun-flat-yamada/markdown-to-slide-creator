@@ -1,0 +1,71 @@
+/* ===== Section Divider Slide ===== */
+section.section-divider {
+  background: <%= sectionDivider.background %>;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+  position: relative;
+}
+
+/* Hide base separator line on section-divider */
+section.section-divider::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: calc(var(--header-height) + 10px);
+  left: var(--margin-left);
+  right: var(--margin-right);
+  height: 1px;
+  background: #E0E0E0;
+}
+
+section.section-divider h1 {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: <%= sectionDivider.title_color || 'var(--color-primary)' %>;
+  flex: 1;
+}
+
+/* Hide page number on section divider */
+section.section-divider::after {
+  display: none;
+}
+
+<% if (sectionDivider.show_section_number) { %>
+/* Section number (large decorative) */
+section.section-divider .section-num {
+  font-size: 8em;
+  font-weight: 700;
+  color: <%= sectionDivider.number_color || '#E0E0E0' %>;
+  line-height: 1;
+  opacity: 0.6;
+<% if (sectionDivider.separator_line) { %>
+  border-left: 2px solid var(--color-primary);
+  padding-left: 40px;
+  margin-left: 40px;
+<% } %>
+}
+<% } %>
+
+/* Accent bar on left side of section title */
+section.section-divider .section-title-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+section.section-divider .section-title-area::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: calc(var(--margin-left) - 15px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 60px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
