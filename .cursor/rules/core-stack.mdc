@@ -1,0 +1,29 @@
+---
+description: Standards for TypeScript, Node.js, and Zod development in markdown-to-slide-creator
+globs: "**/*.ts"
+---
+
+# Core Stack Rules
+
+## TypeScript
+*   **Strict Mode**: Always enable `strict: true` in `tsconfig.json`. No `any` types unless absolutely necessary (and commented).
+*   **Async/Await**: Prefer `async/await` over raw Promises (`.then` / `.catch`).
+*   **Interfaces vs Types**: Use `interface` for object shapes (especially public APIs) and `type` for unions/intersections.
+*   **Imports**: Use absolute imports (if configured) or consistent relative imports.
+
+## Node.js
+*   **File System**:
+    *   Use `import { promises as fs } from 'fs'` or `import * as fs from 'fs/promises'`.
+    *   For CLI startup / synchronous operations where performance is negligible, `fs.readFileSync` is acceptable (e.g., loading config once).
+*   **Path Handling**: Always use `path.join()` or `path.resolve()` for file paths to ensure cross-platform compatibility (Windows/Linux).
+*   **Process Exit**: Use `process.exit(1)` for fatal errors in CLI, but throw Errors in library code.
+
+## Zod (Validation)
+*   **Schema Definition**: Define schemas in `src/config/schema.ts` or relevant model files.
+*   **Inference**: Use `z.infer<typeof schema>` to derive TypeScript types from Zod schemas.
+*   **Defaults**: Use `.default()` in Zod schemas to handle missing configuration values, rather than manual null checks in code.
+*   **Validation**: Always validate external inputs (YAML config, CLI args, front-matter) using `.parse()` or `.safeParse()`.
+
+## Error Handling
+*   **CLI Errors**: User-facing errors should be logged to `console.error` with a clear message, without stack traces (unless `--debug` is set).
+*   **Library Errors**: Throw specific error types (e.g., `ConfigError`, `DesignProfileMissingError`).

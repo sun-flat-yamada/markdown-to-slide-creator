@@ -101,6 +101,18 @@ docs/
 └── design.md           # 設計書
 ```
 
+## 🤖 AI Configuration
+
+このプロジェクトは AI Agent (Cursor, Windsurf, etc.) 向けの設定を含んでいます。
+
+- **`.agent/AGENTS.md`**: AI Agent 向けのプロジェクト概要とガイドライン
+- **`.cursor/rules/`**: コーディング規約 (TypeScript, Marp theme)
+- **`.agent/workflows/`**: 定型作業のワークフロー定義
+    - `add-design-pattern.md`: 新しい企業デザインを追加するフロー
+    - `generate-slides.md`: スライド生成テストのフロー
+- **`.agent/skills/`**: AI が利用可能なカスタムスキル
+    - `analyze-slide-design`: PDF からデザイン情報を抽出・分析するツールセット
+
 ## 📄 License
 
 [MIT](./LICENSE) © 2026 Youhei Yamada
