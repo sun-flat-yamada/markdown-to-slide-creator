@@ -1,0 +1,26 @@
+---
+description: Standards for Marp theme customization and CSS structure in markdown-to-slide-creator
+globs: "src/theme/**/*.ejs", "src/theme/**/*.css"
+---
+
+# Marp Theme Rules
+
+## CSS Architecture
+*   **Variables**: rely heavily on CSS Custom Properties (`--variable-name`) defined in `base.css.ejs` or the config. Avoid hardcoding values in specific component styles.
+*   **Scoped Styles**: Marp slides are scoped by `<section>`. Use `section.class-name` selectors to apply styles to specific slide types (e.g., `section.cover`, `section.end`).
+*   **Response Design**: Slide dimensions are fixed (usually 1280x720 or 960x720), so standard responsive web design (media queries) is rarely needed. Focus on absolute positioning and flex/grid for fixed-ratio layouts.
+
+## EJS Templating
+*   **Logic-Free Templates**: Keep EJS templates as logic-free as possible. Complex logic (e.g., color manipulation) should be handled in `src/theme/generator.ts` and passed as ready-to-use variables to the template.
+*   **Escape by Default**: Use `<%= variable %>` for encoded output. Use `<%- variable %>` ONLY when you explicitly intend to output raw HTML/CSS (e.g., a complete gradient string).
+
+## Design System Fidelity
+*   **Color Palettes**: When implementing a new design (e.g., TOYOTA), ensure all colors are mapped from `corporate-config.yaml` and not hardcoded.
+    *   Primary -> `var(--color-primary)`
+    *   Secondary -> `var(--color-secondary)`
+    *   Accent -> `var(--color-accent)`
+*   **Typography**: Use the font stack defined in the config.
+
+## Marp Specifics
+*   **Directives**: Use Markdown directives (`<!-- _class: ... -->`) to switch designs.
+*   **Pagination**: Handle pagination visibility via CSS (`display: none` on specific slides) if Marp's native pagination control isn't granular enough.
