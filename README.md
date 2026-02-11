@@ -25,6 +25,12 @@ npm run build
 ## 🚀 Usage
 
 ```bash
+# corporate-config.yaml の色やデザインを設定したカラーパレットを作成します (または、プリセットを使用します)。
+# active: の行で使用するプリセット名を指定します。
+# プリセットは以下企業の公開されているIR情報スライドを元にサンプル作成しています。
+#  - TOYOTA
+#  - FUJIFILM
+
 # 現行 slides.md を corporate-config.yaml のパラメーターを指定してスライド作成
 node dist/index.js build slides.md --config corporate-config.yaml
 ```
@@ -97,4 +103,4 @@ docs/
 
 ## 📄 License
 
-[MIT](./LICENSE) © sun.flat.yamada
+[MIT](./LICENSE) © 2026 Youhei Yamada
