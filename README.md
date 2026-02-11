@@ -3,6 +3,8 @@
 [![CI](https://github.com/sun-flat-yamada/markdown-to-slide-creator/actions/workflows/ci.yml/badge.svg)](https://github.com/sun-flat-yamada/markdown-to-slide-creator/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
+
 > Marp ベースの Corporate スライド生成 CLI ツール。YAML 設定ファイルでコーポレートデザインをパラメーター化し、Markdown 原稿から PDF / PPTX を一発生成します。
 
 ## ✨ Features
@@ -112,6 +114,12 @@ docs/
     - `generate-slides.md`: スライド生成テストのフロー
 - **`.agent/skills/`**: AI が利用可能なカスタムスキル
     - `analyze-slide-design`: PDF からデザイン情報を抽出・分析するツールセット
+
+## 🤝 Contribution & Support
+
+Contributions are welcome! If you find this tool useful, please consider supporting its development.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
 
 ## 📄 License
 
