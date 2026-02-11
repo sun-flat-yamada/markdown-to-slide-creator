@@ -25,6 +25,12 @@ npm run build
 ## 🚀 Usage
 
 ```bash
+# corporate-config.yaml の色やデザインを設定したカラーパレットを作成します (または、プリセットを使用します)。
+# active: の行で使用するプリセット名を指定します。
+# プリセットは以下企業の公開されているIR情報スライドを元にサンプル作成しています。
+#  - TOYOTA
+#  - FUJIFILM
+
 # 現行 slides.md を corporate-config.yaml のパラメーターを指定してスライド作成
 node dist/index.js build slides.md --config corporate-config.yaml
 ```
@@ -95,6 +101,18 @@ docs/
 └── design.md           # 設計書
 ```
 
+## 🤖 AI Configuration
+
+このプロジェクトは AI Agent (Cursor, Windsurf, etc.) 向けの設定を含んでいます。
+
+- **`.agent/AGENTS.md`**: AI Agent 向けのプロジェクト概要とガイドライン
+- **`.cursor/rules/`**: コーディング規約 (TypeScript, Marp theme)
+- **`.agent/workflows/`**: 定型作業のワークフロー定義
+    - `add-design-pattern.md`: 新しい企業デザインを追加するフロー
+    - `generate-slides.md`: スライド生成テストのフロー
+- **`.agent/skills/`**: AI が利用可能なカスタムスキル
+    - `analyze-slide-design`: PDF からデザイン情報を抽出・分析するツールセット
+
 ## 📄 License
 
-[MIT](./LICENSE) © sun.flat.yamada
+[MIT](./LICENSE) © 2026 Youhei Yamada
