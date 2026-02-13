@@ -148,14 +148,17 @@ export const CorporateConfigSchema = z.object({
   }),
   special_slides: z
     .object({
-      cover: SpecialSlideSchema.default({ background: '#FFFFFF' }),
-      section_divider: SpecialSlideSchema.default({ background: '#FFFFFF' }),
-      end: SpecialSlideSchema.default({ background: '#FFFFFF' }),
+      cover: SpecialSlideSchema.default({ background: '#FFFFFF', layout: 'default' }),
+      section_divider: SpecialSlideSchema.default({
+        background: '#FFFFFF',
+        layout: 'default',
+      }),
+      end: SpecialSlideSchema.default({ background: '#FFFFFF', layout: 'default' }),
     })
     .default({
-      cover: { background: '#FFFFFF' },
-      section_divider: { background: '#FFFFFF' },
-      end: { background: '#FFFFFF' },
+      cover: { background: '#FFFFFF', layout: 'default' },
+      section_divider: { background: '#FFFFFF', layout: 'default' },
+      end: { background: '#FFFFFF', layout: 'default' },
     }),
   auto_structure: AutoStructureSchema.default({
     enabled: true,
