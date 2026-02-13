@@ -64,7 +64,8 @@ section.cover::after {
 
 <% if (cover.show_logo) { %>
 /* Logo on cover */
-section.cover .cover-logo {
+section.cover .cover-logo,
+section.cover-image-right .cover-logo {
   position: absolute;
 <% if (cover.logo_position === 'bottom-right') { %>
   bottom: 40px;
@@ -76,3 +77,84 @@ section.cover .cover-logo {
 <% } %>
 }
 <% } %>
+
+/* ===== Cover Slide (Image Right) ===== */
+section.cover-image-right {
+  background: <%= cover.background %>;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+section.cover-image-right .cover-content {
+  padding: 80px 40px 120px var(--margin-left);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+section.cover-image-right .cover-content h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: <%= cover.title_color || 'var(--color-text)' %>;
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+section.cover-image-right .cover-content h2 {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: <%= cover.title_color || 'var(--color-text)' %>;
+  margin-top: 0.2em;
+  margin-bottom: 1em;
+}
+
+section.cover-image-right .cover-content h3 {
+  font-size: 0.9em;
+  font-weight: 400;
+  color: var(--color-muted);
+  margin-top: 2em;
+}
+
+section.cover-image-right .cover-content p {
+  font-size: 0.85em;
+  color: var(--color-muted);
+}
+
+section.cover-image-right .cover-image-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+section.cover-image-right .cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Accent line under title for image-right */
+<% if (cover.show_accent_line) { %>
+section.cover-image-right .cover-content::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 60%; /* Adjust position relative to content part */
+  left: var(--margin-left);
+  width: 150px;
+  height: 4px;
+  background: <% if (cover.accent_line_color && cover.accent_line_color.startsWith('linear-gradient')) { %><%= cover.accent_line_color %><% } else { %>var(--color-primary)<% } %>;
+}
+<% } %>
+
+/* Hide header/page number on cover-image-right */
+section.cover-image-right header,
+section.cover-image-right::after {
+  display: none;
+}

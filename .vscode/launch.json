@@ -6,7 +6,13 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
-      "args": ["${workspaceFolder}/src/index.ts"],
+      "args": [
+        "${workspaceFolder}/src/index.ts",
+        "build",
+        "${workspaceFolder}/examples/sample-slides.md",
+        "--config",
+        "${workspaceFolder}/corporate-config.yaml"
+      ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"]
