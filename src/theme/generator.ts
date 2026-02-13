@@ -91,6 +91,7 @@ export function generateThemeCss(config: CorporateConfig): string {
     end: {
       ...config.special_slides.end,
     },
+    logo: config.logo,
   };
 
   // 各テンプレートをレンダリングして結合

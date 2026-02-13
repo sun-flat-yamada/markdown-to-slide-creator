@@ -21,16 +21,28 @@ const testConfig: CorporateConfig = {
     },
   },
   header: {
-    height: '40px', left: '', center: '', right: '',
-    background: 'transparent', color: '#333',
+    height: '40px',
+    left: '',
+    center: '',
+    right: '',
+    background: 'transparent',
+    color: '#333',
   },
   footer: {
-    height: '36px', left: '', center: '', right: '',
-    background: 'transparent', color: '#666', company_name: 'TestCorp',
+    height: '36px',
+    left: '',
+    center: '',
+    right: '',
+    background: 'transparent',
+    color: '#666',
+    company_name: 'TestCorp',
   },
   pagination: {
-    enabled: true, format: '{{page}}', position: 'footer-right',
-    hide_on: ['cover', 'end'], start_from: 2,
+    enabled: true,
+    format: '{{page}}',
+    position: 'footer-right',
+    hide_on: ['cover', 'end'],
+    start_from: 2,
   },
   margin: { top: '60px', bottom: '50px', left: '50px', right: '50px' },
   special_slides: {
@@ -39,8 +51,10 @@ const testConfig: CorporateConfig = {
     end: { background: '#FFF', show_logo: false, show_tagline: false },
   },
   auto_structure: {
-    enabled: true, section_heading_level: 2,
-    auto_cover: true, auto_end: true,
+    enabled: true,
+    section_heading_level: 2,
+    auto_cover: true,
+    auto_end: true,
   },
   ai_prompt: { path: './prompts/slide-convert.md' },
 };
@@ -94,5 +108,45 @@ describe('preprocessMarkdown', () => {
     const result = preprocessMarkdown(md, testConfig, { autoEnd: false });
 
     expect(result.markdown).not.toContain('<!-- _class: end -->');
+  });
+
+  it('should render logo with img tag on cover and end slides', () => {
+    const md = `# Title`;
+    const logoConfig: CorporateConfig = {
+      ...testConfig,
+      logo: {
+        path: './assets/logo.svg',
+        width: '120px',
+        position: 'footer-right',
+      },
+      special_slides: {
+        ...testConfig.special_slides,
+        cover: { ...testConfig.special_slides.cover, show_logo: true },
+        end: { ...testConfig.special_slides.end, show_logo: true },
+      },
+    };
+    const result = preprocessMarkdown(md, logoConfig);
+
+    expect(result.markdown).toContain(
+      '<img src="./assets/logo.svg" alt="logo" class="cover-logo" style="width: 120px;">',
+    );
+    expect(result.markdown).toContain(
+      '<img src="./assets/logo.svg" alt="logo" class="end-logo" style="width: 120px;">',
+    );
+  });
+
+  it('should generate cover with image-right layout', () => {
+    const layoutConfig: CorporateConfig = JSON.parse(JSON.stringify(testConfig));
+    layoutConfig.special_slides.cover.layout = 'image-right';
+    layoutConfig.special_slides.cover.image = '/path/to/image.jpg';
+
+    const md = `# Title\n## Subtitle`;
+    const result = preprocessMarkdown(md, layoutConfig);
+
+    expect(result.markdown).toContain('<!-- _class: cover-image-right -->');
+    expect(result.markdown).toContain('<div class="cover-content">');
+    expect(result.markdown).toContain(
+      '<div class="cover-image-container"><img src="/path/to/image.jpg" class="cover-image" /></div>',
+    );
   });
 });

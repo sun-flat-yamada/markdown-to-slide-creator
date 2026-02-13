@@ -39,12 +39,17 @@ export function runMarp(options: MarpRunnerOptions): void {
 
   // Marp CLI コマンド構築
   const args = [
-    'npx', '--yes', '@marp-team/marp-cli',
-    '--theme', themePath,
+    'npx',
+    '--yes',
+    '@marp-team/marp-cli',
+    '--theme',
+    themePath,
     ...(html ? ['--html'] : []),
     ...formatArgs,
     inputPath,
-    '-o', outputPath,
+    '--allow-local-files',
+    '-o',
+    outputPath,
   ];
 
   const command = args.join(' ');
@@ -68,7 +73,7 @@ export function buildSlides(
   processedMarkdown: string,
   themeCssPath: string,
   outputPath: string,
-  workDir: string
+  workDir: string,
 ): void {
   // 一時 Markdown ファイルを作成
   const tempMdPath = path.join(workDir, '.slide-creator-temp.md');

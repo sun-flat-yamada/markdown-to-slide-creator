@@ -61,7 +61,68 @@ Options:
 | 特殊スライド | 表紙 (`cover`)、セクション区切り、最終ページ |
 | ロゴ | パス、幅、配置位置 |
 
-詳細は [仕様書](./docs/specification.md) および [設計書](./docs/design.md) を参照してください。
+### `corporate-config.yaml` リファレンス
+
+詳細は [仕様書](./docs/specification.md) を参照してください。
+
+#### 基本設定
+
+```yaml
+slide:
+  size: '16:9' # '16:9' or '4:3' or object { width, height }
+margin:
+  top: '60px'
+  bottom: '50px'
+  left: '50px'
+  right: '50px'
+```
+
+#### 特殊スライド設定
+
+表紙、セクション区切り、最終ページの設定を行います。
+
+```yaml
+special_slides:
+  # 表紙スライド設定
+  cover:
+    background: '#FFFFFF'
+    title_color: '#333333'
+    # レイアウト設定 (NEW)
+    layout: 'default'        # 'default' (テキストのみ) or 'image-right' (右側に画像)
+    image: './assets/cover.jpg' # layout: 'image-right' の場合の画像パス (YAMLからの相対パス)
+    
+    show_logo: true
+    logo_position: 'bottom-right' # 'bottom-right' or 'center'
+
+  # セクション区切りスライド設定
+  section_divider:
+    background: '#FFFFFF'
+    show_section_number: true
+
+  # 最終ページ設定
+  end:
+    background: '#FFFFFF'
+    show_logo: true
+    show_tagline: true
+    tagline: 'Value from Innovation'
+```
+
+#### カラーパレット設定
+
+複数の企業ブランドカラーを一元管理できます。
+
+```yaml
+colors:
+  active: 'my-corp' # 使用するパレット名
+  palettes:
+    my-corp:
+      primary: '#00A78E'   # ブランドカラー
+      secondary: '#005A57' # アセント、強調色
+      text: '#333333'      # 文字色
+      background: '#FFFFFF'
+      gradients:           # グラデーション定義
+        - { name: 'header', direction: 'to right', stops: ['#00A78E', '#005A57'] }
+```
 
 ## 🛠 Development
 

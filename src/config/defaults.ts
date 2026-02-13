@@ -46,6 +46,7 @@ export const DEFAULT_CONFIG: Partial<CorporateConfig> = {
       show_accent_line: true,
       show_logo: true,
       logo_position: 'bottom-right',
+      layout: 'default',
     },
     section_divider: {
       background: '#FFFFFF',
@@ -53,6 +54,7 @@ export const DEFAULT_CONFIG: Partial<CorporateConfig> = {
       number_color: '#E0E0E0',
       show_nav_tabs: true,
       separator_line: true,
+      layout: 'default',
     },
     end: {
       background: '#FFFFFF',
@@ -60,6 +62,7 @@ export const DEFAULT_CONFIG: Partial<CorporateConfig> = {
       logo_position: 'center',
       show_tagline: true,
       tagline: '',
+      layout: 'default',
     },
   },
   auto_structure: {
