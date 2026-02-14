@@ -6,22 +6,8 @@ slide:
 
 # カラーパレット
 colors:
-  active: 'fujifilm'
+  active: 'toyota'
   palettes:
-    fujifilm:
-      primary: '#00A78E'
-      secondary: '#005A57'
-      accent: '#E87722'
-      negative: '#C00000'
-      background: '#FFFFFF'
-      text: '#333333'
-      muted: '#999999'
-      gradients:
-        - { name: 'header', direction: 'to right', stops: ['#00A78E', '#005A57'] }
-        - { name: 'cover-line', direction: 'to right', stops: ['#00A78E', '#00C9A7'] }
-        - { name: 'section-bg', direction: '135deg', stops: ['#F8F9FA', '#FFFFFF'] }
-        - { name: 'accent', direction: 'to right', stops: ['#E87722', '#FF9A4D'] }
-        - { name: 'subtle', direction: 'to bottom', stops: ['#F5F5F5', '#EEEEEE'] }
     toyota:
       primary: '#E50020'
       secondary: '#EB0A1E'
@@ -36,10 +22,24 @@ colors:
         - { name: 'section-bg', direction: '135deg', stops: ['#FFFFFF', '#FFFFFF'] }
         - { name: 'accent', direction: 'to right', stops: ['#F19527', '#FFD700'] }
         - { name: 'subtle', direction: 'to bottom', stops: ['#F5F5F5', '#EDEDEE'] }
+    fujifilm:
+      primary: '#00A78E'
+      secondary: '#005A57'
+      accent: '#E87722'
+      negative: '#C00000'
+      background: '#FFFFFF'
+      text: '#333333'
+      muted: '#999999'
+      gradients:
+        - { name: 'header', direction: 'to right', stops: ['#00A78E', '#005A57'] }
+        - { name: 'cover-line', direction: 'to right', stops: ['#00A78E', '#00C9A7'] }
+        - { name: 'section-bg', direction: '135deg', stops: ['#F8F9FA', '#FFFFFF'] }
+        - { name: 'accent', direction: 'to right', stops: ['#E87722', '#FF9A4D'] }
+        - { name: 'subtle', direction: 'to bottom', stops: ['#F5F5F5', '#EEEEEE'] }
 
 # ロゴ
 logo:
-  path: './assets/logo.png'
+  path: './assets/logo.svg'
   width: '150px'
   position: 'footer-right'
 
@@ -60,7 +60,7 @@ footer:
   right: '{{company_name}}'
   background: 'transparent'
   color: '#666666'
-  company_name: 'FUJIFILM Holdings Corporation'
+  company_name: 'Holdings Corporation'
 
 # ページ番号
 pagination:
@@ -85,6 +85,8 @@ special_slides:
     title_align: 'left'
     show_accent_line: true
     accent_line_color: '{{gradient:cover-line}}'
+    layout: 'image-right'
+    image: './assets/cover.svg'
     show_logo: true
     logo_position: 'bottom-right'
 

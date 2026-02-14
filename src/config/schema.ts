@@ -86,6 +86,8 @@ export const SpecialSlideSchema = z.object({
   separator_line: z.boolean().optional(),
   show_tagline: z.boolean().optional(),
   tagline: z.string().optional(),
+  layout: z.enum(['default', 'image-right']).default('default'),
+  image: z.string().optional(),
 });
 export type SpecialSlideConfig = z.infer<typeof SpecialSlideSchema>;
 
@@ -104,40 +106,65 @@ export const AiPromptSchema = z.object({
 
 // ===== Root Config =====
 export const CorporateConfigSchema = z.object({
-  slide: z.object({
-    size: SlideSizeSchema.default('16:9'),
-  }).default({ size: '16:9' }),
+  slide: z
+    .object({
+      size: SlideSizeSchema.default('16:9'),
+    })
+    .default({ size: '16:9' }),
   colors: z.object({
     active: z.string(),
     palettes: z.record(z.string(), ColorPaletteSchema),
   }),
   logo: LogoSchema.optional(),
   header: HeaderFooterSchema.default({
-    height: '40px', left: '', center: '', right: '',
-    background: 'transparent', color: '#333333',
+    height: '40px',
+    left: '',
+    center: '',
+    right: '',
+    background: 'transparent',
+    color: '#333333',
   }),
   footer: FooterSchema.default({
-    height: '36px', left: '', center: '', right: '',
-    background: 'transparent', color: '#666666', company_name: '',
+    height: '36px',
+    left: '',
+    center: '',
+    right: '',
+    background: 'transparent',
+    color: '#666666',
+    company_name: '',
   }),
   pagination: PaginationSchema.default({
-    enabled: true, format: '{{page}}', position: 'footer-right',
-    hide_on: ['cover', 'end'], start_from: 2,
+    enabled: true,
+    format: '{{page}}',
+    position: 'footer-right',
+    hide_on: ['cover', 'end'],
+    start_from: 2,
   }),
   margin: MarginSchema.default({
-    top: '60px', bottom: '50px', left: '50px', right: '50px',
+    top: '60px',
+    bottom: '50px',
+    left: '50px',
+    right: '50px',
   }),
-  special_slides: z.object({
-    cover: SpecialSlideSchema.default({ background: '#FFFFFF' }),
-    section_divider: SpecialSlideSchema.default({ background: '#FFFFFF' }),
-    end: SpecialSlideSchema.default({ background: '#FFFFFF' }),
-  }).default({
-    cover: { background: '#FFFFFF' },
-    section_divider: { background: '#FFFFFF' },
-    end: { background: '#FFFFFF' },
-  }),
+  special_slides: z
+    .object({
+      cover: SpecialSlideSchema.default({ background: '#FFFFFF', layout: 'default' }),
+      section_divider: SpecialSlideSchema.default({
+        background: '#FFFFFF',
+        layout: 'default',
+      }),
+      end: SpecialSlideSchema.default({ background: '#FFFFFF', layout: 'default' }),
+    })
+    .default({
+      cover: { background: '#FFFFFF', layout: 'default' },
+      section_divider: { background: '#FFFFFF', layout: 'default' },
+      end: { background: '#FFFFFF', layout: 'default' },
+    }),
   auto_structure: AutoStructureSchema.default({
-    enabled: true, section_heading_level: 2, auto_cover: true, auto_end: true,
+    enabled: true,
+    section_heading_level: 2,
+    auto_cover: true,
+    auto_end: true,
   }),
   ai_prompt: AiPromptSchema.default({
     path: './prompts/slide-convert.md',

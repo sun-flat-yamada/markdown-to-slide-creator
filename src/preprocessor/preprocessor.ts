@@ -69,7 +69,16 @@ export function preprocessMarkdown(
 
   if (autoCover && cover) {
     // 表紙スライド
-    const coverLines = [`<!-- _class: cover -->`, `<!-- _paginate: false -->`];
+    const layout = config.special_slides.cover.layout;
+    const coverClass = layout === 'image-right' ? 'cover-image-right' : 'cover';
+
+    const coverLines = [`<!-- _class: ${coverClass} -->`, `<!-- _paginate: false -->`];
+
+    // タイトルなどのテキストコンテンツ用コンテナ開始
+    if (layout === 'image-right') {
+      coverLines.push('<div class="cover-content">');
+    }
+
     coverLines.push(`# ${cover.title}`);
     if (cover.subtitle) {
       coverLines.push(`## ${cover.subtitle}`);
@@ -86,9 +95,24 @@ export function preprocessMarkdown(
       afterCoverStart = i + 1;
     }
 
+    // タイトルなどのテキストコンテンツ用コンテナ終了
+    if (layout === 'image-right') {
+      coverLines.push('</div>');
+    }
+
+    // 表紙画像
+    if (layout === 'image-right' && config.special_slides.cover.image) {
+      coverLines.push(
+        `<div class="cover-image-container"><img src="${config.special_slides.cover.image}" class="cover-image" /></div>`,
+      );
+    }
+
     if (config.logo && config.special_slides.cover.show_logo) {
+      // image-right レイアウトの場合はロゴの位置調整が必要かもしれないが、一旦デフォルトの絶対配置を使用
       coverLines.push('');
-      coverLines.push(`![logo](${config.logo.path})`);
+      coverLines.push(
+        `<img src="${config.logo.path}" alt="logo" class="cover-logo" style="width: ${config.logo.width};">`,
+      );
     }
 
     outputSlides.push(coverLines.join('\n'));
@@ -167,7 +191,9 @@ export function preprocessMarkdown(
   if (autoEnd) {
     const endLines = [`<!-- _class: end -->`, `<!-- _paginate: false -->`];
     if (config.logo && config.special_slides.end.show_logo) {
-      endLines.push(`![logo](${config.logo.path})`);
+      endLines.push(
+        `<img src="${config.logo.path}" alt="logo" class="end-logo" style="width: ${config.logo.width};">`,
+      );
     }
     if (config.special_slides.end.show_tagline && config.special_slides.end.tagline) {
       endLines.push('');

@@ -57,6 +57,26 @@ program
           config.colors.active = opts.palette;
         }
 
+        // ロゴパスを絶対パスに解決
+        if (config.logo && config.logo.path) {
+          const configDir = path.dirname(configPath);
+          config.logo.path = path.resolve(configDir, config.logo.path);
+          // Windowsの場合、バックスラッシュをスラッシュに置換（Marp/HTML互換性のため）
+          config.logo.path = config.logo.path.split(path.sep).join('/');
+        }
+
+        // 表紙画像パスを絶対パスに解決
+        if (config.special_slides.cover.image) {
+          const configDir = path.dirname(configPath);
+          config.special_slides.cover.image = path.resolve(
+            configDir,
+            config.special_slides.cover.image,
+          );
+          config.special_slides.cover.image = config.special_slides.cover.image
+            .split(path.sep)
+            .join('/');
+        }
+
         // 出力先
         const outputPath = opts.output || inputPath.replace(/\.md$/, '.pdf');
 
