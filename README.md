@@ -1,3 +1,5 @@
+![Markdown to Slide creator Logo](images/markdown-to-slide-creator-logo.png)
+
 # Markdown to Slide creator
 
 [![CI](https://github.com/sun-flat-yamada/markdown-to-slide-creator/actions/workflows/ci.yml/badge.svg)](https://github.com/sun-flat-yamada/markdown-to-slide-creator/actions/workflows/ci.yml)

@@ -39,7 +39,7 @@ colors:
 
 # ロゴ
 logo:
-  path: './assets/logo.svg'
+  path: './assets/corp_logo_mdsc.png'
   width: '150px'
   position: 'footer-right'
 
@@ -86,7 +86,7 @@ special_slides:
     show_accent_line: true
     accent_line_color: '{{gradient:cover-line}}'
     layout: 'image-right'
-    image: './assets/cover.svg'
+    image: './assets/cover_sample_wave.png'
     show_logo: true
     logo_position: 'bottom-right'
 
@@ -114,4 +114,4 @@ auto_structure:
 
 # AI プロンプト
 ai_prompt:
-  path: './prompts/slide-convert.md'
+  path: './.agent/skills/create-slide-deck/SKILL.md'
