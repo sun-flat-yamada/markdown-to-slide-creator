@@ -101,7 +101,7 @@ export const AutoStructureSchema = z.object({
 
 // ===== AI Prompt =====
 export const AiPromptSchema = z.object({
-  path: z.string().default('./prompts/slide-convert.md'),
+  path: z.string().default('./.agent/skills/create-slide-deck/SKILL.md'),
 });
 
 // ===== Root Config =====

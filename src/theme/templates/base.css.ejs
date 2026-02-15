@@ -107,3 +107,9 @@ section::before {
   height: 1px;
   background: #E0E0E0;
 }
+
+/* Hide separator line on cover slides */
+section.cover::before,
+section.cover-image-right::before {
+  display: none !important;
+}

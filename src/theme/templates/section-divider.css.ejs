@@ -28,10 +28,8 @@ section.section-divider h1 {
   flex: 1;
 }
 
-/* Hide page number on section divider */
-section.section-divider::after {
-  display: none;
-}
+/* Page number on section divider (User requested visible) */
+/* section.section-divider::after { display: none; } */
 
 <% if (sectionDivider.show_section_number) { %>
 /* Section number (large decorative) */

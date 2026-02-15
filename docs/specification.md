@@ -127,8 +127,8 @@ Marp (Markdown Presentation Ecosystem) をベースに、**Corporate デザイ�
 
 | 要件ID | 説明 |
 |---|---|
-| AI-01 | `prompts/slide-convert.md` として Markdown → スライド変換用プロンプトファイルを提供する |
-| AI-02 | プロンプトファイルはユーザーがカスタマイズ可能とする |
+| AI-01 | `.agent/skills/create-slide-deck/SKILL.md` として Markdown → スライド変換用スキル定義を提供する |
+| AI-02 | スキル定義ファイルはユーザーがカスタマイズ可能とする |
 | AI-03 | `corporate-config.yaml` の `ai_prompt.path` で参照先を変更可能とする |
 | AI-04 | プロンプトには構造ルール（見出しレベル、スライド分割、テキスト量）を定義する |
 

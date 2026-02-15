@@ -38,8 +38,22 @@ export function preprocessMarkdown(
   }
 
   // セクション検出
-  const sections = autoSection ? detectSections(body, headingLevel) : [];
   const cover = autoCover ? detectCover(body) : null;
+  let sections = autoSection ? detectSections(body, headingLevel) : [];
+
+  // 表紙として使用された行をセクションから除外する
+  if (cover) {
+    const sectionLines = new Set(sections.map((s) => s.headingLine));
+    if (cover.subtitleLine !== undefined && sectionLines.has(cover.subtitleLine)) {
+      // サブタイトルがセクション見出しとしても検出されている場合は、セクションを優先する
+      cover.subtitle = undefined;
+      cover.subtitleLine = undefined;
+    }
+    const coverLines = new Set(
+      [cover.titleLine, cover.subtitleLine].filter((l): l is number => l !== undefined),
+    );
+    sections = sections.filter((s) => !coverLines.has(s.headingLine));
+  }
 
   // ヘッダー/フッター HTML 生成
   const headerHtml = buildHeaderDirective(config);
@@ -72,11 +86,22 @@ export function preprocessMarkdown(
     const layout = config.special_slides.cover.layout;
     const coverClass = layout === 'image-right' ? 'cover-image-right' : 'cover';
 
-    const coverLines = [`<!-- _class: ${coverClass} -->`, `<!-- _paginate: false -->`];
+    const coverLines = [
+      `<!-- _class: ${coverClass} -->`,
+      `<!-- _paginate: false -->`,
+      `<!-- _header: " " -->`,
+    ];
 
     // タイトルなどのテキストコンテンツ用コンテナ開始
     if (layout === 'image-right') {
       coverLines.push('<div class="cover-content">');
+      coverLines.push('');
+    }
+
+    // 表紙のアクセントライン
+    if (config.special_slides.cover.show_accent_line) {
+      coverLines.push('<div class="cover-accent"></div>');
+      coverLines.push('');
     }
 
     coverLines.push(`# ${cover.title}`);
@@ -89,33 +114,36 @@ export function preprocessMarkdown(
     for (let i = afterCoverStart; i < bodyLines.length; i++) {
       const line = bodyLines[i]!.trim();
       if (line === '') continue;
-      if (line.startsWith('## ') || line.startsWith('# ')) break;
+      if (line.startsWith('## ') || line.startsWith('# ') || line === '---') break;
       // その他のテキスト（日付など）を表紙に含める
       coverLines.push(bodyLines[i]!);
       afterCoverStart = i + 1;
     }
 
-    // タイトルなどのテキストコンテンツ用コンテナ終了
-    if (layout === 'image-right') {
-      coverLines.push('</div>');
-    }
-
-    // 表紙画像
-    if (layout === 'image-right' && config.special_slides.cover.image) {
-      coverLines.push(
-        `<div class="cover-image-container"><img src="${config.special_slides.cover.image}" class="cover-image" /></div>`,
-      );
-    }
-
     if (config.logo && config.special_slides.cover.show_logo) {
-      // image-right レイアウトの場合はロゴの位置調整が必要かもしれないが、一旦デフォルトの絶対配置を使用
       coverLines.push('');
       coverLines.push(
         `<img src="${config.logo.path}" alt="logo" class="cover-logo" style="width: ${config.logo.width};">`,
       );
     }
 
+    // タイトルなどのテキストコンテンツ用コンテナ終了
+    if (layout === 'image-right') {
+      coverLines.push('');
+      coverLines.push('</div>');
+    }
+
     outputSlides.push(coverLines.join('\n'));
+
+    // image-right レイアウトの場合は画像コンテナを最後に追加（または別の位置）
+    // CSSでgrid配置されるため、順番は重要
+    if (layout === 'image-right' && config.special_slides.cover.image) {
+      const lastSlide = outputSlides[outputSlides.length - 1];
+      outputSlides[outputSlides.length - 1] =
+        lastSlide +
+        '\n\n' +
+        `<div class="cover-image-container"><img src="${config.special_slides.cover.image}" class="cover-image" /></div>`;
+    }
   }
 
   if (autoSection && sections.length > 0) {
@@ -125,42 +153,97 @@ export function preprocessMarkdown(
       const section = sections[si]!;
       const nextSection = sections[si + 1];
 
+      // セクション内コンテンツの範囲を特定
+      const contentStart = section.headingLine + 1;
+      const contentEnd = nextSection ? nextSection.headingLine : bodyLines.length;
+
+      // 扉ページに含める「冒頭のコンテンツ」を探す
+      // 次のスライド区切り (---) または サブセクション (###) が出るまで。
+      const leadingContentLines: string[] = [];
+      let nextContentStart = contentStart;
+
+      for (let i = contentStart; i < contentEnd; i++) {
+        const line = bodyLines[i]!;
+        const trimmed = line.trim();
+        if (trimmed === '---' || trimmed.startsWith('### ') || trimmed.startsWith('<!--')) {
+          break;
+        }
+        leadingContentLines.push(line);
+        nextContentStart = i + 1;
+      }
+
       // セクション区切りスライド
       const sectionNum = String(section.index).padStart(2, '0');
       const dividerLines = [
         `<!-- _class: section-divider -->`,
-        `<!-- _paginate: false -->`,
-        `# ${section.title}`,
-        '',
-        `<span class="section-num">${sectionNum}</span>`,
+        `<div class="section-title-area">`,
+        `<h1>${section.title}</h1>`,
       ];
+
+      if (leadingContentLines.length > 0) {
+        dividerLines.push('');
+        dividerLines.push(...leadingContentLines);
+      }
+
+      dividerLines.push('</div>');
+
+      if (config.auto_structure.enabled) {
+        dividerLines.push(`<span class="section-num">${sectionNum}</span>`);
+      }
+
       outputSlides.push(dividerLines.join('\n'));
 
-      // セクション内コンテンツ（次のセクションまで）
-      const contentStart = section.headingLine + 1;
-      const contentEnd = nextSection ? nextSection.headingLine : bodyLines.length;
-
       let currentSlideLines: string[] = [];
+      let isLayoutSlide = false;
 
-      for (let i = contentStart; i < contentEnd; i++) {
+      for (let i = nextContentStart; i < contentEnd; i++) {
         const line = bodyLines[i]!;
         const trimmed = line.trim();
 
         // --- はスライド区切り（そのまま維持）
         if (trimmed === '---') {
-          if (currentSlideLines.length > 0) {
+          const hasContent = currentSlideLines.some((l) => l.trim() !== '');
+          if (hasContent) {
             outputSlides.push(currentSlideLines.join('\n'));
-            currentSlideLines = [];
           }
+          currentSlideLines = [];
+          isLayoutSlide = false;
           continue;
         }
 
-        // ### 見出しで新しいスライドを開始
-        if (trimmed.startsWith('### ')) {
-          if (currentSlideLines.length > 0) {
-            outputSlides.push(currentSlideLines.join('\n'));
-            currentSlideLines = [];
+        // HTMLブロックの前後には空行が必要 (markdown-it の仕様)
+        // タグのみの行を見つけたら前後に空行を確保する
+        if (trimmed.match(/^<[a-zA-Z0-9]+(\s+[^>]+)?>$/)) {
+          currentSlideLines.push(line);
+          currentSlideLines.push('');
+          continue;
+        }
+
+        if (trimmed.match(/^<\/[a-zA-Z0-9]+>$/)) {
+          if (
+            currentSlideLines.length > 0 &&
+            currentSlideLines[currentSlideLines.length - 1].trim() !== ''
+          ) {
+            currentSlideLines.push('');
           }
+          currentSlideLines.push(line);
+          continue;
+        }
+
+        // レイアウトクラス定義の検出 (<!-- _class: cols-2 --> 等)
+        if (trimmed.match(/^<!--\s*_class:\s*(cols-|img-|hero|bg-|image-).*\s*-->/)) {
+          isLayoutSlide = true;
+        }
+
+        // ### 見出しで新しいスライドを開始
+        // ただし、レイアウト指定されたスライド内では ### を分割に使用しない
+        if (trimmed.startsWith('### ') && !isLayoutSlide) {
+          const hasContent = currentSlideLines.some((l) => l.trim() !== '');
+          if (hasContent) {
+            outputSlides.push(currentSlideLines.join('\n'));
+          }
+          currentSlideLines = [];
+          isLayoutSlide = false;
         }
 
         currentSlideLines.push(line);

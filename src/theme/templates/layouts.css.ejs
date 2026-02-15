@@ -1,0 +1,156 @@
+/* ===== Layout Patterns ===== */
+
+/* 2-Column Layout */
+section.cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 40px;
+}
+/* If using div.col, they naturally fall into columns. */
+/* If using raw tokens (h3, ul, h3, ul), they flow into grid cells. */
+/* To support "Header spans full width, then columns", we need a wrapper or manual span class. */
+/* But for simple side-by-side, we assume contents are effectively grouped or we use div.col. */
+
+/* 3-Column Layout */
+section.cols-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 30px;
+}
+
+/* Image Positioning */
+section.img-right {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-column-gap: 40px;
+  align-items: center;
+}
+
+section.img-left {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  grid-column-gap: 40px;
+  align-items: center;
+}
+
+section.img-top-right {
+  position: relative;
+}
+section.img-top-right img {
+  position: absolute;
+  top: 80px;
+  right: 50px;
+  width: 300px;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+section.img-bottom-right {
+  position: relative;
+}
+section.img-bottom-right img {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  width: 300px;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Hero Slide (Full Background Image with Text Overlay) */
+section.hero {
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+section.hero h1,
+section.hero h2,
+section.hero h3,
+section.hero p,
+section.hero li {
+  color: #FFFFFF;
+}
+section.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4); /* Dark overlay */
+  z-index: -1;
+}
+
+/* Specific styling helpers */
+img.circle {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+img.shadow {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-small {
+  font-size: 0.8em;
+}
+
+section.bg-dark {
+  background-color: #333333;
+  color: #FFFFFF;
+}
+section.bg-dark h1,
+section.bg-dark h2,
+section.bg-dark h3,
+section.bg-dark strong {
+  color: #FFFFFF;
+}
+
+/* Image Focus Layout (Full Background Image with Centered Key Message) */
+section.image-focus {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+}
+section.image-focus header {
+  display: none;
+}
+/* Ensure footer is visible if desired, or keep hidden. User requested footer visible. */
+/* section.image-focus footer { display: none; } */
+
+/* Hide header line for special layouts */
+section.hero::before,
+section.image-focus::before {
+  display: none;
+}
+section.image-focus h1 {
+  color: #FFFFFF;
+  font-size: 3.5em;
+  margin: 0.2em 0;
+}
+section.image-focus h2,
+section.image-focus h3 {
+  color: #FFFFFF;
+  font-size: 2em;
+  margin: 0.2em 0;
+}
+section.image-focus p {
+  color: #FFFFFF;
+}

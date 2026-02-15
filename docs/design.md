@@ -17,8 +17,8 @@
 │                     slide-creator CLI                         │
 │                                                              │
 │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐ │
-│  │Config Loader │  │  Prompt      │  │ Markdown            │ │
-│  │  (YAML+Zod)  │  │  Manager     │  │ Preprocessor        │ │
+│  │  (YAML+Zod)  │  │  Skill       │  │ Markdown            │ │
+│  │              │  │  Definition  │  │ Preprocessor        │ │
 │  └──────┬───────┘  └──────────────┘  │ ├ SectionDetector   │ │
 │         │                            │ ├ DirectiveInjector  │ │
 │         ▼                            │ └ TemplateVars       │ │
@@ -465,9 +465,9 @@ auto_structure:
   auto_cover: true
   auto_end: true
 
-# ===== AI プロンプト =====
+# ===== AI プロンプト (Skill Reference) =====
 ai_prompt:
-  path: "./prompts/slide-convert.md"
+  path: "./.agent/skills/create-slide-deck/SKILL.md"
 ```
 
 ---
