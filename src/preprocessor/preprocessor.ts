@@ -165,7 +165,7 @@ export function preprocessMarkdown(
       for (let i = contentStart; i < contentEnd; i++) {
         const line = bodyLines[i]!;
         const trimmed = line.trim();
-        if (trimmed === '---' || trimmed.startsWith('### ')) {
+        if (trimmed === '---' || trimmed.startsWith('### ') || trimmed.startsWith('<!--')) {
           break;
         }
         leadingContentLines.push(line);

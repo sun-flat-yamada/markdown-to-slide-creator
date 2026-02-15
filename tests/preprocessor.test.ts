@@ -169,4 +169,20 @@ describe('preprocessMarkdown', () => {
     expect(slides[2]).toContain('August 6, 2025');
     expect(slides[3]).toContain('### Sub-section');
   });
+
+  it('should NOT include Marp directives in leading content of section divider', () => {
+    const md = `# Title\n## Section 1\n<!-- _class: cols-2 -->\n\nContent`;
+    const result = preprocessMarkdown(md, testConfig);
+
+    // The directive should NOT be in the divider area
+    expect(result.markdown).not.toContain(
+      '<div class="section-title-area">\n<!-- _class: cols-2 -->',
+    );
+
+    const slides = result.markdown.split(/\n---\n/);
+    // Divider is index 2, content is index 3
+    expect(slides[2]).toContain('<!-- _class: section-divider -->');
+    expect(slides[2]).not.toContain('<!-- _class: cols-2 -->');
+    expect(slides[3]).toContain('<!-- _class: cols-2 -->');
+  });
 });
