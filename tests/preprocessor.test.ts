@@ -46,9 +46,9 @@ const testConfig: CorporateConfig = {
   },
   margin: { top: '60px', bottom: '50px', left: '50px', right: '50px' },
   special_slides: {
-    cover: { background: '#FFF' },
-    section_divider: { background: '#FFF' },
-    end: { background: '#FFF', show_logo: false, show_tagline: false },
+    cover: { background: '#FFF', layout: 'default' },
+    section_divider: { background: '#FFF', layout: 'default' },
+    end: { background: '#FFF', show_logo: false, show_tagline: false, layout: 'default' },
   },
   auto_structure: {
     enabled: true,
@@ -56,7 +56,7 @@ const testConfig: CorporateConfig = {
     auto_cover: true,
     auto_end: true,
   },
-  ai_prompt: { path: './prompts/slide-convert.md' },
+  ai_prompt: { path: './.agent/skills/create-slide-deck/SKILL.md' },
 };
 
 describe('preprocessMarkdown', () => {
@@ -115,7 +115,7 @@ describe('preprocessMarkdown', () => {
     const logoConfig: CorporateConfig = {
       ...testConfig,
       logo: {
-        path: './assets/logo.svg',
+        path: './assets/corp_logo_mdsc.png',
         width: '120px',
         position: 'footer-right',
       },
@@ -128,17 +128,17 @@ describe('preprocessMarkdown', () => {
     const result = preprocessMarkdown(md, logoConfig);
 
     expect(result.markdown).toContain(
-      '<img src="./assets/logo.svg" alt="logo" class="cover-logo" style="width: 120px;">',
+      '<img src="./assets/corp_logo_mdsc.png" alt="logo" class="cover-logo" style="width: 120px;">',
     );
     expect(result.markdown).toContain(
-      '<img src="./assets/logo.svg" alt="logo" class="end-logo" style="width: 120px;">',
+      '<img src="./assets/corp_logo_mdsc.png" alt="logo" class="end-logo" style="width: 120px;">',
     );
   });
 
   it('should generate cover with image-right layout', () => {
     const layoutConfig: CorporateConfig = JSON.parse(JSON.stringify(testConfig));
     layoutConfig.special_slides.cover.layout = 'image-right';
-    layoutConfig.special_slides.cover.image = '/path/to/image.jpg';
+    layoutConfig.special_slides.cover.image = './assets/cover_sample_wave.png';
 
     const md = `# Title\n## Subtitle`;
     const result = preprocessMarkdown(md, layoutConfig);
@@ -146,7 +146,7 @@ describe('preprocessMarkdown', () => {
     expect(result.markdown).toContain('<!-- _class: cover-image-right -->');
     expect(result.markdown).toContain('<div class="cover-content">');
     expect(result.markdown).toContain(
-      '<div class="cover-image-container"><img src="/path/to/image.jpg" class="cover-image" /></div>',
+      '<div class="cover-image-container"><img src="./assets/cover_sample_wave.png" class="cover-image" /></div>',
     );
   });
 });
