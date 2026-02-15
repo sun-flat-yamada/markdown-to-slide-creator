@@ -14,6 +14,7 @@ const TEMPLATE_DIR = path.join(__dirname, 'templates');
  */
 const TEMPLATE_FILES = [
   'base.css.ejs',
+  'layouts.css.ejs', // Add layout patterns
   'header-footer.css.ejs',
   'cover.css.ejs',
   'section-divider.css.ejs',

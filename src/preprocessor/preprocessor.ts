@@ -38,8 +38,16 @@ export function preprocessMarkdown(
   }
 
   // セクション検出
-  const sections = autoSection ? detectSections(body, headingLevel) : [];
   const cover = autoCover ? detectCover(body) : null;
+  let sections = autoSection ? detectSections(body, headingLevel) : [];
+
+  // 表紙として使用された行をセクションから除外する
+  if (cover) {
+    const coverLines = new Set(
+      [cover.titleLine, cover.subtitleLine].filter((l): l is number => l !== undefined),
+    );
+    sections = sections.filter((s) => !coverLines.has(s.headingLine));
+  }
 
   // ヘッダー/フッター HTML 生成
   const headerHtml = buildHeaderDirective(config);
@@ -72,11 +80,22 @@ export function preprocessMarkdown(
     const layout = config.special_slides.cover.layout;
     const coverClass = layout === 'image-right' ? 'cover-image-right' : 'cover';
 
-    const coverLines = [`<!-- _class: ${coverClass} -->`, `<!-- _paginate: false -->`];
+    const coverLines = [
+      `<!-- _class: ${coverClass} -->`,
+      `<!-- _paginate: false -->`,
+      `<!-- _header: " " -->`,
+    ];
 
     // タイトルなどのテキストコンテンツ用コンテナ開始
     if (layout === 'image-right') {
       coverLines.push('<div class="cover-content">');
+      coverLines.push('');
+    }
+
+    // 表紙のアクセントライン
+    if (config.special_slides.cover.show_accent_line) {
+      coverLines.push('<div class="cover-accent"></div>');
+      coverLines.push('');
     }
 
     coverLines.push(`# ${cover.title}`);
@@ -89,30 +108,23 @@ export function preprocessMarkdown(
     for (let i = afterCoverStart; i < bodyLines.length; i++) {
       const line = bodyLines[i]!.trim();
       if (line === '') continue;
-      if (line.startsWith('## ') || line.startsWith('# ')) break;
+      if (line.startsWith('## ') || line.startsWith('# ') || line === '---') break;
       // その他のテキスト（日付など）を表紙に含める
       coverLines.push(bodyLines[i]!);
       afterCoverStart = i + 1;
     }
 
-    // タイトルなどのテキストコンテンツ用コンテナ終了
-    if (layout === 'image-right') {
-      coverLines.push('</div>');
-    }
-
-    // 表紙画像
-    if (layout === 'image-right' && config.special_slides.cover.image) {
-      coverLines.push(
-        `<div class="cover-image-container"><img src="${config.special_slides.cover.image}" class="cover-image" /></div>`,
-      );
-    }
-
     if (config.logo && config.special_slides.cover.show_logo) {
-      // image-right レイアウトの場合はロゴの位置調整が必要かもしれないが、一旦デフォルトの絶対配置を使用
       coverLines.push('');
       coverLines.push(
         `<img src="${config.logo.path}" alt="logo" class="cover-logo" style="width: ${config.logo.width};">`,
       );
+    }
+
+    // タイトルなどのテキストコンテンツ用コンテナ終了
+    if (layout === 'image-right') {
+      coverLines.push('');
+      coverLines.push('</div>');
     }
 
     outputSlides.push(coverLines.join('\n'));
@@ -129,7 +141,6 @@ export function preprocessMarkdown(
       const sectionNum = String(section.index).padStart(2, '0');
       const dividerLines = [
         `<!-- _class: section-divider -->`,
-        `<!-- _paginate: false -->`,
         `# ${section.title}`,
         '',
         `<span class="section-num">${sectionNum}</span>`,
@@ -141,6 +152,7 @@ export function preprocessMarkdown(
       const contentEnd = nextSection ? nextSection.headingLine : bodyLines.length;
 
       let currentSlideLines: string[] = [];
+      let isLayoutSlide = false;
 
       for (let i = contentStart; i < contentEnd; i++) {
         const line = bodyLines[i]!;
@@ -148,19 +160,48 @@ export function preprocessMarkdown(
 
         // --- はスライド区切り（そのまま維持）
         if (trimmed === '---') {
-          if (currentSlideLines.length > 0) {
+          const hasContent = currentSlideLines.some((l) => l.trim() !== '');
+          if (hasContent) {
             outputSlides.push(currentSlideLines.join('\n'));
-            currentSlideLines = [];
           }
+          currentSlideLines = [];
+          isLayoutSlide = false;
           continue;
         }
 
-        // ### 見出しで新しいスライドを開始
-        if (trimmed.startsWith('### ')) {
-          if (currentSlideLines.length > 0) {
-            outputSlides.push(currentSlideLines.join('\n'));
-            currentSlideLines = [];
+        // HTMLブロックの前後には空行が必要 (markdown-it の仕様)
+        // タグのみの行を見つけたら前後に空行を確保する
+        if (trimmed.match(/^<[a-zA-Z0-9]+(\s+[^>]+)?>$/)) {
+          currentSlideLines.push(line);
+          currentSlideLines.push('');
+          continue;
+        }
+
+        if (trimmed.match(/^<\/[a-zA-Z0-9]+>$/)) {
+          if (
+            currentSlideLines.length > 0 &&
+            currentSlideLines[currentSlideLines.length - 1].trim() !== ''
+          ) {
+            currentSlideLines.push('');
           }
+          currentSlideLines.push(line);
+          continue;
+        }
+
+        // レイアウトクラス定義の検出 (<!-- _class: cols-2 --> 等)
+        if (trimmed.match(/^<!--\s*_class:\s*(cols-|img-|hero|bg-|image-).*\s*-->/)) {
+          isLayoutSlide = true;
+        }
+
+        // ### 見出しで新しいスライドを開始
+        // ただし、レイアウト指定されたスライド内では ### を分割に使用しない
+        if (trimmed.startsWith('### ') && !isLayoutSlide) {
+          const hasContent = currentSlideLines.some((l) => l.trim() !== '');
+          if (hasContent) {
+            outputSlides.push(currentSlideLines.join('\n'));
+          }
+          currentSlideLines = [];
+          isLayoutSlide = false;
         }
 
         currentSlideLines.push(line);
