@@ -95,14 +95,11 @@ export function detectCover(markdown: string): CoverInfo | null {
       const cover: CoverInfo = { title, titleLine: i };
 
       // 次の行にサブタイトル (## ) があれば取得
-      for (let j = i + 1; j < lines.length; j++) {
-        const nextLine = lines[j]!.trim();
-        if (nextLine === '') continue;
-        if (nextLine.startsWith('## ') && !nextLine.startsWith('### ')) {
-          cover.subtitle = nextLine.slice(3).trim();
-          cover.subtitleLine = j;
-        }
-        break;
+      // 空行をあけずに記述された場合のみサブタイトルとみなす
+      const nextLine = lines[i + 1]?.trim();
+      if (nextLine && nextLine.startsWith('## ') && !nextLine.startsWith('### ')) {
+        cover.subtitle = nextLine.slice(3).trim();
+        cover.subtitleLine = i + 1;
       }
       return cover;
     }

@@ -43,6 +43,12 @@ export function preprocessMarkdown(
 
   // 表紙として使用された行をセクションから除外する
   if (cover) {
+    const sectionLines = new Set(sections.map((s) => s.headingLine));
+    if (cover.subtitleLine !== undefined && sectionLines.has(cover.subtitleLine)) {
+      // サブタイトルがセクション見出しとしても検出されている場合は、セクションを優先する
+      cover.subtitle = undefined;
+      cover.subtitleLine = undefined;
+    }
     const coverLines = new Set(
       [cover.titleLine, cover.subtitleLine].filter((l): l is number => l !== undefined),
     );
@@ -128,6 +134,16 @@ export function preprocessMarkdown(
     }
 
     outputSlides.push(coverLines.join('\n'));
+
+    // image-right レイアウトの場合は画像コンテナを最後に追加（または別の位置）
+    // CSSでgrid配置されるため、順番は重要
+    if (layout === 'image-right' && config.special_slides.cover.image) {
+      const lastSlide = outputSlides[outputSlides.length - 1];
+      outputSlides[outputSlides.length - 1] =
+        lastSlide +
+        '\n\n' +
+        `<div class="cover-image-container"><img src="${config.special_slides.cover.image}" class="cover-image" /></div>`;
+    }
   }
 
   if (autoSection && sections.length > 0) {
