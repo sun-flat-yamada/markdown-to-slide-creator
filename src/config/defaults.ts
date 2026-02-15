@@ -72,6 +72,6 @@ export const DEFAULT_CONFIG: Partial<CorporateConfig> = {
     auto_end: true,
   },
   ai_prompt: {
-    path: './prompts/slide-convert.md',
+    path: './.agent/skills/create-slide-deck/SKILL.md',
   },
 };
