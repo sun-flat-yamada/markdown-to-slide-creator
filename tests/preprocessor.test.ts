@@ -149,4 +149,23 @@ describe('preprocessMarkdown', () => {
       '<div class="cover-image-container"><img src="./assets/cover_sample_wave.png" class="cover-image" /></div>',
     );
   });
+
+  it('should include leading content in section divider slide', () => {
+    const md = `# Title\n## Section 1\nAugust 6, 2025\n\n### Sub-section\nContent`;
+    const result = preprocessMarkdown(md, testConfig);
+
+    expect(result.markdown).toContain('<div class="section-title-area">');
+    expect(result.markdown).toContain('August 6, 2025');
+    // The content after ### should be on a separate slide
+    const slides = result.markdown.split(/\n---\n/);
+    // front-matter/cover is slide 0, divider is slide 1... wait
+    // Actually split by '---' gives:
+    // 0: front-matter
+    // 1: cover
+    // 2: section-divider
+    // 3: sub-section
+    expect(slides[2]).toContain('<!-- _class: section-divider -->');
+    expect(slides[2]).toContain('August 6, 2025');
+    expect(slides[3]).toContain('### Sub-section');
+  });
 });

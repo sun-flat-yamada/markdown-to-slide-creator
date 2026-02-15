@@ -153,24 +153,50 @@ export function preprocessMarkdown(
       const section = sections[si]!;
       const nextSection = sections[si + 1];
 
+      // セクション内コンテンツの範囲を特定
+      const contentStart = section.headingLine + 1;
+      const contentEnd = nextSection ? nextSection.headingLine : bodyLines.length;
+
+      // 扉ページに含める「冒頭のコンテンツ」を探す
+      // 次のスライド区切り (---) または サブセクション (###) が出るまで。
+      const leadingContentLines: string[] = [];
+      let nextContentStart = contentStart;
+
+      for (let i = contentStart; i < contentEnd; i++) {
+        const line = bodyLines[i]!;
+        const trimmed = line.trim();
+        if (trimmed === '---' || trimmed.startsWith('### ')) {
+          break;
+        }
+        leadingContentLines.push(line);
+        nextContentStart = i + 1;
+      }
+
       // セクション区切りスライド
       const sectionNum = String(section.index).padStart(2, '0');
       const dividerLines = [
         `<!-- _class: section-divider -->`,
+        `<div class="section-title-area">`,
         `# ${section.title}`,
-        '',
-        `<span class="section-num">${sectionNum}</span>`,
       ];
-      outputSlides.push(dividerLines.join('\n'));
 
-      // セクション内コンテンツ（次のセクションまで）
-      const contentStart = section.headingLine + 1;
-      const contentEnd = nextSection ? nextSection.headingLine : bodyLines.length;
+      if (leadingContentLines.length > 0) {
+        dividerLines.push('');
+        dividerLines.push(...leadingContentLines);
+      }
+
+      dividerLines.push('</div>');
+
+      if (config.auto_structure.enabled) {
+        dividerLines.push(`<span class="section-num">${sectionNum}</span>`);
+      }
+
+      outputSlides.push(dividerLines.join('\n'));
 
       let currentSlideLines: string[] = [];
       let isLayoutSlide = false;
 
-      for (let i = contentStart; i < contentEnd; i++) {
+      for (let i = nextContentStart; i < contentEnd; i++) {
         const line = bodyLines[i]!;
         const trimmed = line.trim();
 
