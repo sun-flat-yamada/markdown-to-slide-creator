@@ -155,6 +155,7 @@ describe('preprocessMarkdown', () => {
     const result = preprocessMarkdown(md, testConfig);
 
     expect(result.markdown).toContain('<div class="section-title-area">');
+    expect(result.markdown).toContain('<h1>Section 1</h1>');
     expect(result.markdown).toContain('August 6, 2025');
     // The content after ### should be on a separate slide
     const slides = result.markdown.split(/\n---\n/);

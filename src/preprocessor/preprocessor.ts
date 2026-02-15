@@ -177,7 +177,7 @@ export function preprocessMarkdown(
       const dividerLines = [
         `<!-- _class: section-divider -->`,
         `<div class="section-title-area">`,
-        `# ${section.title}`,
+        `<h1>${section.title}</h1>`,
       ];
 
       if (leadingContentLines.length > 0) {
