@@ -62,7 +62,7 @@ export function runMarp(options: MarpRunnerOptions): void {
     });
     console.log(`✅ 出力完了: ${outputPath}`);
   } catch (error) {
-    throw new Error(`Marp CLI の実行に失敗しました: ${error}`);
+    throw new Error(`Marp CLI の実行に失敗しました: ${error}`, { cause: error });
   }
 }
 
