@@ -110,14 +110,13 @@ export function preprocessMarkdown(
     }
     // 表紙の後の追加テキスト行を収集（## 以外）
     const bodyLines = body.split('\n');
-    let afterCoverStart = (cover.subtitleLine ?? cover.titleLine) + 1;
+    const afterCoverStart = (cover.subtitleLine ?? cover.titleLine) + 1;
     for (let i = afterCoverStart; i < bodyLines.length; i++) {
       const line = bodyLines[i]!.trim();
       if (line === '') continue;
       if (line.startsWith('## ') || line.startsWith('# ') || line === '---') break;
       // その他のテキスト（日付など）を表紙に含める
       coverLines.push(bodyLines[i]!);
-      afterCoverStart = i + 1;
     }
 
     if (config.logo && config.special_slides.cover.show_logo) {
